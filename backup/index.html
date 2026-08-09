@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BestPriceWorld</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f6fb;
+  color: #111827;
+}
+
+header {
+  background: linear-gradient(135deg, #111827, #2563eb);
+  color: white;
+  padding: 25px 15px 35px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  opacity: 0.9;
+  margin-bottom: 22px;
+}
+
+.search-box {
+  max-width: 700px;
+  margin: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-box button {
+  padding: 15px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 25px auto;
+  padding: 0 15px;
+}
+
+.info {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+  position: relative;
+}
+
+.card.best {
+  border: 2px solid #22c55e;
+}
+
+.best-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #22c55e;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.product-name {
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.store {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.country {
+  color: #6b7280;
+  margin-top: 4px;
+  margin-bottom: 15px;
+}
+
+.breakdown {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.cost {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.cost small {
+  display: block;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.cost strong {
+  font-size: 15px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.total-price {
+  font-size: 25px;
+  font-weight: bold;
+  color: #2563eb;
+}
+
+.visit {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  padding: 11px 17px;
+  border-radius: 9px;
+  font-weight: bold;
+}
+
+.empty {
+  text-align: center;
+  padding: 45px 15px;
+  color: #6b7280;
+}
+
+@media (max-width: 700px) {
+  .logo {
+    font-size: 25px;
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-box button {
+    width: 100%;
+  }
+
+  .breakdown {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .total {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .visit {
+    width: 100%;
+    text-align: center;
+  }
+
+  .best-badge {
+    position: static;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">BestPriceWorld</div>
+
+  <div class="subtitle">
+    Compare the real final price from different stores
+  </div>
+
+  <div class="search-box">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search for a product..."
+      autocomplete="off"
+    >
+
+    <button onclick="searchProducts()">
+      Search
+    </button>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="info">
+    <strong>💰 Compare the final price</strong>
+    <br>
+    We calculate product price, shipping, taxes, customs and additional costs.
+  </div>
+
+  <div id="results" class="results">
+    <div class="empty">
+      Search for a product, for example:
+      <strong>iPhone</strong>,
+      <strong>Samsung</strong> or
+      <strong>MacBook</strong>.
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+const input = document.getElementById("searchInput");
+const results = document.getElementById("results");
+
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    searchProducts();
+  }
+});
+
+async function searchProducts() {
+
+  const query = input.value.trim();
+
+  if (!query) {
+    results.innerHTML = `
+      <div class="empty">
+        Please enter a product name.
+      </div>
+    `;
+    return;
+  }
+
+  results.innerHTML = `
+    <div class="empty">
+      Searching...
+    </div>
+  `;
+
+  try {
+
+    const response = await fetch(
+      "/api/search?q=" + encodeURIComponent(query)
+    );
+
+    const data = await response.json();
+
+    if (!data.length) {
+      results.innerHTML = `
+        <div class="empty">
+          No products found for "<strong>${escapeHtml(query)}</strong>".
+        </div>
+      `;
+      return;
+    }
+
+    results.innerHTML = data.map((product, index) => {
+
+      const best = index === 0;
+
+      return `
+        <div class="card ${best ? "best" : ""}">
+
+          ${best ? `<div class="best-badge">🏆 BEST PRICE</div>` : ""}
+
+          <div class="product-name">
+            ${escapeHtml(product.name)}
+          </div>
+
+          <div class="store">
+            🏪 ${escapeHtml(product.store)}
+          </div>
+
+          <div class="country">
+            🌍 ${escapeHtml(product.country)}
+          </div>
+
+          <div class="breakdown">
+
+            <div class="cost">
+              <small>Product</small>
+              <strong>${formatPrice(product.price)}</strong>
+            </div>
+
+            <div class="cost">
+              <small>Shipping</small>
+              <strong>${formatPrice(product.shipping)}</strong>
+            </div>
+
+            <div class="cost">
+              <small>Tax</small>
+              <strong>${formatPrice(product.tax)}</strong>
+            </div>
+
+            <div class="cost">
+              <small>Customs</small>
+              <strong>${formatPrice(product.customs)}</strong>
+            </div>
+
+            <div class="cost">
+              <small>Other</small>
+              <strong>${formatPrice(product.extra)}</strong>
+            </div>
+
+          </div>
+
+          <div class="total">
+
+            <div>
+              <div>Final price</div>
+              <div class="total-price">
+                ${formatPrice(product.total)}
+              </div>
+            </div>
+
+            <a
+              class="visit"
+              href="${product.url}"
+              onclick="return false;"
+            >
+              Visit store
+            </a>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  } catch (error) {
+
+    console.error(error);
+
+    results.innerHTML = `
+      <div class="empty">
+        ❌ Error connecting to BestPriceWorld server.
+      </div>
+    `;
+  }
+}
+
+function formatPrice(value) {
+  return Number(value).toLocaleString("sl-SI", {
+    style: "currency",
+    currency: "EUR"
+  });
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+</script>
+
+</body>
+</html>
