@@ -6,27 +6,27 @@
     <title>Console Finder Pro</title>
     <style>
         body { font-family: sans-serif; background: #f0f2f5; text-align: center; padding: 20px; color: #333; margin: 0; }
-        .grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px; }
-        .card { background: white; padding: 20px; border-radius: 10px; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .grid { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 30px; }
+        .card { background: white; padding: 20px; border-radius: 12px; width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; }
-        .price { font-size: 1.2rem; color: #e67e22; font-weight: bold; margin: 10px 0; }
-        .btn { display: block; background: #27ae60; color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 15px; }
-        .btn:hover { background: #219150; }
-        .disclaimer { font-size: 0.75rem; color: #888; margin-top: 10px; line-height: 1.3; }
-        footer { margin-top: 40px; font-size: 0.8rem; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
+        .btn { display: block; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+        .btn-official { background: #34495e; color: white; }
+        .btn-affiliate { background: #e67e22; color: white; }
+        .disclaimer { font-size: 0.75rem; color: #888; margin-top: 15px; line-height: 1.3; }
+        footer { margin-top: 50px; font-size: 0.8rem; color: #666; border-top: 1px solid #ddd; padding-top: 20px; }
     </style>
 </head>
 <body>
     <h1>Console Finder Pro</h1>
-    <p>Find the best gaming deals in one place.</p>
+    <p>Compare official prices and best retailer deals.</p>
 
     <div class="grid">
         <!-- PlayStation 5 -->
         <div class="card">
             <img src="slike/Ps5.png" alt="PS5">
-            <h2>PlayStation 5 Slim</h2>
-            <div class="price">Check price below</div>
-            <a href="https://www.amazon.com/s?k=PlayStation+5+Slim&tag=kova9901-20" class="btn" target="_blank">Check Current Price</a>
+            <h2>PlayStation 5</h2>
+            <a href="https://direct.playstation.com/" class="btn btn-official" target="_blank">Official Store (Prices)</a>
+            <a href="https://www.amazon.com/s?k=PlayStation+5+Slim&tag=kova9901-20" class="btn btn-affiliate" target="_blank">Check Retailer Deals</a>
             <p class="disclaimer">*Please check the price and availability directly on the retailer's website.</p>
         </div>
 
@@ -34,8 +34,8 @@
         <div class="card">
             <img src="slike/Nintendo.jpeg" alt="Switch">
             <h2>Nintendo Switch OLED</h2>
-            <div class="price">Check price below</div>
-            <a href="https://www.amazon.com/s?k=Nintendo+Switch+OLED&tag=kova9901-20" class="btn" target="_blank">Check Current Price</a>
+            <a href="https://www.nintendo.com/store/hardware/" class="btn btn-official" target="_blank">Official Store (Prices)</a>
+            <a href="https://www.amazon.com/s?k=Nintendo+Switch+OLED&tag=kova9901-20" class="btn btn-affiliate" target="_blank">Check Retailer Deals</a>
             <p class="disclaimer">*Please check the price and availability directly on the retailer's website.</p>
         </div>
     </div>
